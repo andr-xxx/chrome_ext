@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // setTimeout(() => new Popup(), 1000)
-  new Popup()
+  setTimeout(() => new Popup(), 1000)
+  // new Popup()
 }, false);
 
 class Popup {
@@ -22,18 +22,22 @@ class Popup {
       currentWork: this.taskDescription.value,
       target: 'SAVE_CURRENT_TASK'
     }, (response) => {
-      if (response.status === 'done') {
-        this.taskDescription.value = '';
-        this.getTicketsList();
+      if (response) {
+        if (response.status === 'done') {
+          this.taskDescription.value = '';
+          this.getTicketsList();
+        }
       }
     });
   }
 
   getTicketsList() {
+    debugger
     chrome.runtime.sendMessage({
       target: 'GET_TICKETS_LIST'
     }, (response) => {
       if (response.status === 'done') {
+        console.log(response);
         this.ticketsList = response.ticketsList;
         this.showPreviousTasks(this.ticketsList);
       }
