@@ -1,27 +1,39 @@
+// chrome.storage.sync.clear();
 export default class Storage {
-  setInStorage(label, data, cb) {
+  setInStorage(data) {
+    const dateToday = getActualDate();
     return new Promise(((resolve, reject) => {
-      const setting = {};
-      setting[label] = data;
-
-      chrome.storage.sync.set(setting, resolve);
+      chrome.storage.sync.set({
+        [dateToday]: data
+      }, resolve);
     }));
   }
 
-  getFromStorage(key) {
+  getFromStorage() {
+    const dateToday = getActualDate();
+
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.get(key, (items) => {
-        resolve(items)
+      chrome.storage.sync.get({
+        [dateToday] : []
+      }, (items) => {
+        resolve(items[dateToday])
       });
     })
   }
 
   async saveCurrentTask(request) {
-    dateToday = getActualDate();
-    const todayTickets = await storage.getFromStorage(dateToday)
+    const todayTickets = await this.getFromStorage()
       .then((response) => {
-        return response[dateToday]
+        return response
       });
-    await storage.setInStorage(dateToday, [...todayTickets, request.currentWork])
+    await this.setInStorage([...todayTickets, {
+      ticket: request.currentWork,
+      time: Date.now()
+    }])
   }
+}
+
+function getActualDate() {
+  const dateNow = new Date();
+  return `${dateNow.getDate()}-${dateNow.getMonth() + 1}-${dateNow.getFullYear()}`
 }

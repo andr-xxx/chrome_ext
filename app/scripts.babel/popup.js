@@ -32,7 +32,6 @@ class Popup {
   }
 
   getTicketsList() {
-    debugger
     chrome.runtime.sendMessage({
       target: 'GET_TICKETS_LIST'
     }, (response) => {
@@ -47,7 +46,10 @@ class Popup {
   showPreviousTasks(taskList) {
     let list = '';
     taskList.forEach(item => {
-      list += `<li class="list-item"><a href="#">${item}</a></li>`;
+      list += `<li class="list-item">
+                <time>${new Date(item.time).getHours()}:${new Date(item.time).getMinutes()}</time>
+                <a href="#">${item.ticket}</a>
+               </li>`;
     });
 
     this.previousTaskWrapper.innerHTML = list;
