@@ -19,7 +19,7 @@ class Popup {
 
   sendCurrentTask() {
     chrome.runtime.sendMessage({
-      currentWork: this.taskDescription.value,
+      currentTask: this.taskDescription.value,
       target: 'SAVE_CURRENT_TASK'
     }, (response) => {
       if (response) {

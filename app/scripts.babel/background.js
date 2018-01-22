@@ -1,5 +1,6 @@
 'use strict';
 import Storage from './storage';
+import * as helper from './helper';
 
 const DEFAULT_INTERVAL = 60;
 
@@ -14,13 +15,14 @@ let latestInterval;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
     case 'SAVE_CURRENT_TASK':
-      storage.saveCurrentTask(request)
+      storage.saveCurrentTask(request.currentTask)
         .then(() => {
           sendResponse({status: 'done'})
         });
       break;
     case 'GET_TICKETS_LIST':
-      storage.getFromStorage()
+      const dateToday = helper.getFormattedDayToday();
+      storage.getFromStorage(dateToday, [])
         .then((ticketsList) => {
           sendResponse({
             status: 'done',
@@ -39,16 +41,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-chrome.storage.sync.get({
-  'rememberer-interval': DEFAULT_INTERVAL,
-}, function (items) {
-  const interval = items['rememberer-interval'] * 60 * 1000;
-  watchForTime(interval)
+storage.getFromStorage('rememberer-interval', DEFAULT_INTERVAL)
+  .then((items) => {
+    const interval = items * 60 * 1000;
+    watchForTime(interval)
   });
 
 function watchForTime(interval) {
   latestInterval = setInterval(() => {
-    storage.getFromStorage()
+    const dateToday = helper.getFormattedDayToday();
+    storage.getFromStorage(dateToday, [])
       .then((ticketsList) => {
         const lastTaskTime = ticketsList[ticketsList.length - 1].time;
         const timePassed = Date.now() - lastTaskTime;
