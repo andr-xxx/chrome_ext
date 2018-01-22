@@ -100,7 +100,8 @@ gulp.task('babel', () => {
     'chromereload.js',
     'content.js',
     'popup.js',
-    'storage.js'
+    'storage.js',
+    'options.js'
   ];
 
   const tasks = files.map(file => (

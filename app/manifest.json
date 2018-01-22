@@ -33,5 +33,9 @@
     "storage",
     "notifications",
     "background"
-  ]
+  ],
+  "options_ui": {
+    "page": "templates/options.html",
+    "chrome_style": true
+  }
 }
