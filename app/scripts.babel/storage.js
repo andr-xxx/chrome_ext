@@ -14,7 +14,7 @@ export default class Storage {
 
     return new Promise((resolve, reject) => {
       chrome.storage.sync.get({
-        [dateToday] : []
+        [dateToday]: []
       }, (items) => {
         resolve(items[dateToday])
       });
@@ -26,6 +26,7 @@ export default class Storage {
       .then((response) => {
         return response
       });
+
     await this.setInStorage([...todayTickets, {
       ticket: request.currentWork,
       time: Date.now()

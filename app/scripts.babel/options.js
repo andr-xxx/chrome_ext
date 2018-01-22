@@ -5,12 +5,13 @@ function save_options() {
   chrome.storage.sync.set({
     'rememberer-interval': interval
   }, function() {
-    // Update status to let user know options were saved.
-    const status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 1750);
+    updateSetting(interval, () => {
+      const status = document.getElementById('status');
+      status.textContent = 'Options saved.';
+      setTimeout(function() {
+        status.textContent = '';
+      }, 2000);
+    });
   });
 }
 
@@ -19,6 +20,19 @@ function restore_options() {
     'rememberer-interval': DEFAULT_INTERVAL,
   }, function(items) {
     document.getElementById('interval').value = items['rememberer-interval'];
+  });
+}
+
+function updateSetting(newInterval, cb) {
+  chrome.runtime.sendMessage({
+    interval: newInterval,
+    target: 'UPDATE_OPTIONS'
+  }, (response) => {
+    if (response) {
+      if (response.status === 'done') {
+        cb();
+      }
+    }
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);

@@ -1,12 +1,15 @@
 'use strict';
 import Storage from './storage';
 
+const DEFAULT_INTERVAL = 60;
+
 chrome.runtime.onInstalled.addListener(function (details) {
   // console.log('previousVersion', details.previousVersion);
 });
 
-
 const storage = new Storage();
+let latestInterval;
+
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
@@ -25,17 +28,42 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           });
         });
       break;
+    case 'UPDATE_OPTIONS':
+      clearInterval(latestInterval);
+      const interval = request.interval * 60 * 1000;
+      watchForTime(interval);
+      sendResponse({status: 'done'});
+      break;
   }
 
   return true;
 });
 
-// setInterval(() => {
-//   chrome.notifications.create('Hello', {
-//     type: 'basic',
-//     iconUrl: '../images/icon-16.png',
-//     title: 'title',
-//     message: 'HEELLLOOO',
-//   }, () => {
-//   });
-// }, 5000);
+chrome.storage.sync.get({
+  'rememberer-interval': DEFAULT_INTERVAL,
+}, function (items) {
+  const interval = items['rememberer-interval'] * 60 * 1000;
+  watchForTime(interval)
+  });
+
+function watchForTime(interval) {
+  latestInterval = setInterval(() => {
+    storage.getFromStorage()
+      .then((ticketsList) => {
+        const lastTaskTime = ticketsList[ticketsList.length - 1].time;
+        const timePassed = Date.now() - lastTaskTime;
+        if (interval <= timePassed) {
+          showNotification();
+        }
+      });
+  }, 5000)
+}
+
+function showNotification() {
+  chrome.notifications.create('Hello', {
+    type: 'basic',
+    iconUrl: '../images/icon-16.png',
+    title: 'title',
+    message: 'PLEASE LOG YOUR TIME',
+  }, () => {})
+}
