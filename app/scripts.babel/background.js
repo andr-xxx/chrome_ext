@@ -21,8 +21,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
       break;
     case 'GET_TICKETS_LIST':
-      const dateToday = helper.getFormattedDayToday();
-      storage.getFromStorage(dateToday, [])
+      storage.getFromStorage(request.date, [])
         .then((ticketsList) => {
           sendResponse({
             status: 'done',
@@ -52,10 +51,12 @@ function watchForTime(interval) {
     const dateToday = helper.getFormattedDayToday();
     storage.getFromStorage(dateToday, [])
       .then((ticketsList) => {
-        const lastTaskTime = ticketsList[ticketsList.length - 1].time;
-        const timePassed = Date.now() - lastTaskTime;
-        if (interval <= timePassed) {
-          showNotification();
+        if (ticketsList.length) {
+          const lastTaskTime = ticketsList[ticketsList.length - 1].time;
+          const timePassed = Date.now() - lastTaskTime;
+          if (interval <= timePassed) {
+            showNotification();
+          }
         }
       });
   }, 5000)

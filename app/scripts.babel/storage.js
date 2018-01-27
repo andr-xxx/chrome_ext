@@ -2,7 +2,7 @@ import * as helper from './helper';
 
 // chrome.storage.sync.clear();
 export default class Storage {
-  setInStorage(value, key) {
+  setInStorage(key, value) {
     return new Promise(((resolve, reject) => {
       chrome.storage.sync.set({
         [key]: value
@@ -28,7 +28,7 @@ export default class Storage {
         return response
       });
 
-    await this.setInStorage([...todayTickets, {
+    await this.setInStorage(dateToday, [...todayTickets, {
       ticket: currentTask,
       time: Date.now()
     }])
