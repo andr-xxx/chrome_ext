@@ -17,11 +17,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           prepareTimeWatching();
 
           if (request.additionalInformation === 'FROM_OVERLAY') {
-            chrome.tabs.query({}, function(tabs) {
-              for (let i=0; i<tabs.length; ++i) {
-                chrome.tabs.sendMessage(tabs[i].id, {target: 'CLOSE_OVERLAY'});
-              }
-            });
+            closeOverlayToAllTabs();
           }
         });
       break;
@@ -81,11 +77,19 @@ function watchForTime(interval, lastTaskTime) {
   }, 5000)
 }
 
+function closeOverlayToAllTabs() {
+  chrome.tabs.query({}, function(tabs) {
+    for (let i=0; i<tabs.length; ++i) {
+      chrome.tabs.sendMessage(tabs[i].id, {target: 'CLOSE_OVERLAY'});
+    }
+  });
+}
+
 function showNotification() {
   chrome.notifications.create('Hello', {
     type: 'basic',
     iconUrl: '../images/icon-16.png',
-    title: 'title',
+    title: 'REMEMBERER',
     message: 'PLEASE LOG YOUR TIME',
   }, () => {})
 }

@@ -51,7 +51,6 @@ class Popup {
       date: date
     }, (response) => {
       if (response.status === 'done') {
-        console.log(response);
         if (response.ticketsList.length) {
           this.ticketsList = response.ticketsList;
           this.showTasks(this.ticketsList);
@@ -79,18 +78,21 @@ class Popup {
                    </thead>
                    <tbody>`;
     taskList.forEach((item, index) => {
+      const timeStart = this.formatTime(item.timeStart, 'time');
+      const timeEnd = this.formatTime(item.timeEnd, 'time');
+      const duration = this.formatTime(item.duration, 'duration');
       if (index !== taskList.length - 1) {
         table += `<tr>
                   <th scope='row'>${index + 1}</th>
-                  <td>${new Date(item.timeStart).getHours()}:${new Date(item.timeStart).getMinutes()}</td>
-                  <td>${new Date(item.timeEnd).getHours()}:${new Date(item.timeEnd).getMinutes()}</td>
+                  <td>${timeStart}</td>
+                  <td>${timeEnd}</td>
                   <td>${item.ticket}</td>
-                  <td>${parseInt(item.duration / 1000 / 60)} : ${parseInt(item.duration / 1000)}</td>
+                  <td>${duration}</td>
                 </tr>`
       } else {
         table += `<tr>
                   <th scope='row'>${index + 1}</th>
-                  <td>${new Date(item.timeStart).getHours()}:${new Date(item.timeStart).getMinutes()}</td>
+                  <td>${timeStart}</td>
                   <td>In Progress</td>
                   <td>${item.ticket}</td>
                   <td>In Progress</td>
@@ -121,6 +123,22 @@ class Popup {
           this.previousTaskWrapper.removeChild(errorBlock);
         }, 2000);
         break;
+    }
+  }
+
+  formatTime(time, marker) {
+    if (marker === 'time') {
+      let hours = new Date(time).getHours();
+      hours = hours < 10 ? '0' + hours : hours;
+      let minutes = new Date(time).getMinutes();
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return `${hours}:${minutes}`
+    } else if (marker === 'duration') {
+      let hours = parseInt(time / 1000 / 60 / 60);
+      let minutes = parseInt((time - hours * 1000 * 60 * 60) / 1000 / 60);
+      hours = hours < 10 ? '0' + hours : hours;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return `${hours} - ${minutes}`
     }
   }
 }
