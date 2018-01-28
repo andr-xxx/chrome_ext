@@ -15,6 +15,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         .then(() => {
           sendResponse({status: 'done'});
           prepareTimeWatching();
+
+          if (request.additionalInformation === 'FROM_OVERLAY') {
+            chrome.tabs.query({}, function(tabs) {
+              for (let i=0; i<tabs.length; ++i) {
+                chrome.tabs.sendMessage(tabs[i].id, {target: 'CLOSE_OVERLAY'});
+              }
+            });
+          }
         });
       break;
     case 'GET_TICKETS_LIST':
@@ -58,6 +66,17 @@ function watchForTime(interval, lastTaskTime) {
     const timePassed = Date.now() - lastTaskTime;
     if (interval <= timePassed) {
       showNotification();
+
+      chrome.tabs.query({currentWindow: true, active : true}, (response) => {
+        if (response.length) {
+          const activeTabId = response[0].id;
+          chrome.tabs.sendMessage(activeTabId,{
+            target: 'SHOW_OVERLAY'
+          }, (response) => {
+            console.log(response)
+          });
+        }
+      })
     }
   }, 5000)
 }
