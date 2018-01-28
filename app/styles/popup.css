@@ -1,0 +1,16 @@
+html {
+  height: 500px;
+  Width: 700px;
+}
+
+h1 {
+  text-align: center;
+}
+
+input,label {
+  display: block;
+}
+
+.validation-error {
+  color: #ff0000;
+}

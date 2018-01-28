@@ -28,9 +28,15 @@ export default class Storage {
         return response
       });
 
+    if (todayTickets.length >= 1) {
+      const prevTicket = todayTickets[todayTickets.length - 1];
+      prevTicket.timeEnd = Date.now();
+      prevTicket.duration = prevTicket.timeEnd - prevTicket.timeStart;
+    }
+
     await this.setInStorage(dateToday, [...todayTickets, {
       ticket: currentTask,
-      time: Date.now()
+      timeStart: Date.now()
     }])
   }
 }

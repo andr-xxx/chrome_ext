@@ -3,23 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="../styles/bootstrap.min.css">
+  <link rel="stylesheet" href="../styles/popup.css">
 </head>
 <body>
-<h1>REMEMBERER</h1>
+<h1 class="title">REMEMBERER</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <label for="datepicker">Set Date
+        <input type="date" id="datepicker">
+      </label>
+      <button class="btn btn-success" id="apply-date">Show Done Tasks</button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <label>Type what are you doing now
+        <input type="text" id="task-description" placeholder="Your work">
+      </label>
+      <button id="save-task">Done</button>
+    </div>
+  </div>
+</div>
+
 <div class="previous-tasks">
 
 </div>
-<div class=""></div>
-  <label for="datepicker">Set Date</label>
-  <input type="date" id="datepicker">
-  <button id="apply-date">Show Done Tasks</button>
-<div>
-  <label>Type what are you doing now
-    <input type="text" id="task-description" placeholder="Your work">
-  </label>
-  <button id="save-task">Done</button>
-</div>
-
 <script src="../scripts/popup.js"></script>
 </body>
 </html>
