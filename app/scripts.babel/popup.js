@@ -15,7 +15,6 @@ class Popup {
     this.showTasksButton = document.querySelector('#apply-date');
 
     this.initListeners();
-    // this.getTicketsList();
     this.setDatepickerDate();
   }
 
@@ -53,8 +52,12 @@ class Popup {
     }, (response) => {
       if (response.status === 'done') {
         console.log(response);
-        this.ticketsList = response.ticketsList;
-        this.showTasks(this.ticketsList);
+        if (response.ticketsList.length) {
+          this.ticketsList = response.ticketsList;
+          this.showTasks(this.ticketsList);
+        } else {
+          this.showErrorMessage('EMPTY_TABLE');
+        }
       }
     });
   }
@@ -100,14 +103,24 @@ class Popup {
 
 
   showErrorMessage(error) {
-    if (error === 'EMPTY_DESCRIPTION') {
-      const errorBlock = document.createElement('div');
-      errorBlock.className = 'validation-error';
-      errorBlock.innerHTML = `Please, fill description field`;
-      this.taskDescription.parentElement.appendChild(errorBlock);
-      setTimeout(() => {
-        this.taskDescription.parentElement.removeChild(errorBlock);
-      }, 2000)
+    const errorBlock = document.createElement('div');
+    switch (error) {
+      case 'EMPTY_DESCRIPTION':
+        errorBlock.className = 'error validation-error';
+        errorBlock.innerHTML = `Please, fill description field`;
+        this.taskDescription.parentElement.appendChild(errorBlock);
+        setTimeout(() => {
+          this.taskDescription.parentElement.removeChild(errorBlock);
+        }, 2000);
+        break;
+      case 'EMPTY_TABLE':
+        errorBlock.className = 'error content-error';
+        errorBlock.innerHTML = `Any tickets filled today`;
+        this.previousTaskWrapper.appendChild(errorBlock);
+        setTimeout(() => {
+          this.previousTaskWrapper.removeChild(errorBlock);
+        }, 2000);
+        break;
     }
   }
 }

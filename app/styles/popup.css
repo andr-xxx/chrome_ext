@@ -11,6 +11,6 @@ input,label {
   display: block;
 }
 
-.validation-error {
+.error {
   color: #ff0000;
 }
