@@ -20,6 +20,7 @@ export default class Storage {
     })
   }
 
+  // todo move into background script this method
   async saveCurrentTask(currentTask) {
     const dateToday = helper.getFormattedDayToday();
 

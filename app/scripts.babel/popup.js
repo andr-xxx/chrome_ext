@@ -67,7 +67,7 @@ class Popup {
   }
 
   showTasks(taskList) {
-    let table = `<table class="table table-inverse">
+    let table = `<table class='table table-inverse'>
                    <thead>
                      <tr>
                        <th>#</th>
@@ -81,7 +81,7 @@ class Popup {
     taskList.forEach((item, index) => {
       if (index !== taskList.length - 1) {
         table += `<tr>
-                  <th scope="row">${index + 1}</th>
+                  <th scope='row'>${index + 1}</th>
                   <td>${new Date(item.timeStart).getHours()}:${new Date(item.timeStart).getMinutes()}</td>
                   <td>${new Date(item.timeEnd).getHours()}:${new Date(item.timeEnd).getMinutes()}</td>
                   <td>${item.ticket}</td>
@@ -89,7 +89,7 @@ class Popup {
                 </tr>`
       } else {
         table += `<tr>
-                  <th scope="row">${index + 1}</th>
+                  <th scope='row'>${index + 1}</th>
                   <td>${new Date(item.timeStart).getHours()}:${new Date(item.timeStart).getMinutes()}</td>
                   <td>In Progress</td>
                   <td>${item.ticket}</td>
@@ -107,7 +107,7 @@ class Popup {
     switch (error) {
       case 'EMPTY_DESCRIPTION':
         errorBlock.className = 'error validation-error';
-        errorBlock.innerHTML = `Please, fill description field`;
+        errorBlock.innerHTML = 'Please, fill description field';
         this.taskDescription.parentElement.appendChild(errorBlock);
         setTimeout(() => {
           this.taskDescription.parentElement.removeChild(errorBlock);
@@ -115,7 +115,7 @@ class Popup {
         break;
       case 'EMPTY_TABLE':
         errorBlock.className = 'error content-error';
-        errorBlock.innerHTML = `Any tickets filled today`;
+        errorBlock.innerHTML = 'Any tickets filled today';
         this.previousTaskWrapper.appendChild(errorBlock);
         setTimeout(() => {
           this.previousTaskWrapper.removeChild(errorBlock);

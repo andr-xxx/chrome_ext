@@ -4,10 +4,6 @@ import * as helper from './helper';
 
 const DEFAULT_INTERVAL = 60;
 
-chrome.runtime.onInstalled.addListener(function (details) {
-  // console.log('previousVersion', details.previousVersion);
-});
-
 const storage = new Storage();
 let latestInterval;
 
@@ -17,7 +13,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'SAVE_CURRENT_TASK':
       storage.saveCurrentTask(request.currentTask)
         .then(() => {
-          sendResponse({status: 'done'})
+          sendResponse({status: 'done'});
+          prepareTimeWatching();
         });
       break;
     case 'GET_TICKETS_LIST':
@@ -30,9 +27,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
       break;
     case 'UPDATE_OPTIONS':
-      clearInterval(latestInterval);
-      const interval = request.interval * 60 * 1000;
-      watchForTime(interval);
+      prepareTimeWatching();
       sendResponse({status: 'done'});
       break;
   }
@@ -40,25 +35,30 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-storage.getFromStorage('rememberer-interval', DEFAULT_INTERVAL)
-  .then((items) => {
-    const interval = items * 60 * 1000;
-    watchForTime(interval)
-  });
+function prepareTimeWatching() {
+  clearInterval(latestInterval);
+  storage.getFromStorage('rememberer-interval', DEFAULT_INTERVAL)
+    .then((items) => {
+      const interval = items * 60 * 1000;
+      const dateToday = helper.getFormattedDayToday();
 
-function watchForTime(interval) {
-  latestInterval = setInterval(() => {
-    const dateToday = helper.getFormattedDayToday();
-    storage.getFromStorage(dateToday, [])
-      .then((ticketsList) => {
-        if (ticketsList.length) {
-          const lastTaskTime = ticketsList[ticketsList.length - 1].time;
-          const timePassed = Date.now() - lastTaskTime;
-          if (interval <= timePassed) {
-            showNotification();
+      storage.getFromStorage(dateToday, [])
+        .then((ticketsList) => {
+          if (ticketsList.length) {
+            const lastTaskTime = ticketsList[ticketsList.length - 1].timeStart;
+            watchForTime(interval, lastTaskTime);
           }
-        }
-      });
+        });
+    });
+}
+prepareTimeWatching();
+
+function watchForTime(interval, lastTaskTime) {
+  latestInterval = setInterval(() => {
+    const timePassed = Date.now() - lastTaskTime;
+    if (interval <= timePassed) {
+      showNotification();
+    }
   }, 5000)
 }
 
