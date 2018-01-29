@@ -1,0 +1,12 @@
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column label {
+  margin-top: 5px;
+}
+
+#save {
+  margin: 10px;
+}

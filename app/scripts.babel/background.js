@@ -3,9 +3,12 @@ import Storage from './storage';
 import * as helper from './helper';
 
 const DEFAULT_INTERVAL = 60;
+const SECONDS = 1000;
+const MINUTES = SECONDS * 60;
+const HOURS = MINUTES * 60;
 
 const storage = new Storage();
-let latestInterval;
+let notificationInterval;
 
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -40,10 +43,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function prepareTimeWatching() {
-  clearInterval(latestInterval);
+  clearInterval(notificationInterval);
   storage.getFromStorage('rememberer-interval', DEFAULT_INTERVAL)
     .then((items) => {
-      const interval = items * 60 * 1000;
+      const interval = items * MINUTES;
       const dateToday = helper.getFormattedDayToday();
 
       storage.getFromStorage(dateToday, [])
@@ -51,14 +54,16 @@ function prepareTimeWatching() {
           if (ticketsList.length) {
             const lastTaskTime = ticketsList[ticketsList.length - 1].timeStart;
             watchForTime(interval, lastTaskTime);
+          } else {
+            // watchForTime();
           }
         });
     });
 }
-prepareTimeWatching();
 
 function watchForTime(interval, lastTaskTime) {
-  latestInterval = setInterval(() => {
+  notificationInterval = setInterval(() => {
+    // if (!interval || !lastTaskTime)
     const timePassed = Date.now() - lastTaskTime;
     if (interval <= timePassed) {
       showNotification();
@@ -74,7 +79,7 @@ function watchForTime(interval, lastTaskTime) {
         }
       })
     }
-  }, 5000)
+  }, 5 * SECONDS)
 }
 
 function closeOverlayToAllTabs() {
@@ -93,3 +98,5 @@ function showNotification() {
     message: 'PLEASE LOG YOUR TIME',
   }, () => {})
 }
+
+prepareTimeWatching();
