@@ -24,14 +24,13 @@ function saveOptions() {
       }
     });
 
-  console.log(workingDays)
   chrome.storage.sync.set({
     'rememberer-interval': interval,
     'rememberer-start-time': startTime,
     'rememberer-end-time': endTime,
     'rememberer-working-days': workingDays,
   }, function () {
-    updateSetting(interval, () => {
+    updateSetting(() => {
       const status = document.getElementById('status');
       status.textContent = 'Options saved.';
       setTimeout(function () {
@@ -59,9 +58,8 @@ function restoreOptions() {
   });
 }
 
-function updateSetting(newInterval, cb) {
+function updateSetting(cb) {
   chrome.runtime.sendMessage({
-    interval: newInterval,
     target: 'UPDATE_OPTIONS'
   }, (response) => {
     if (response) {

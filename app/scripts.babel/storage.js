@@ -12,11 +12,17 @@ export default class Storage {
 
   getFromStorage(key, defaultValue) {
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.get({
-        [key]: defaultValue
-      }, (items) => {
-        resolve(items[key])
-      });
+      if (Array.isArray(key)) {
+        chrome.storage.sync.get(key, (items) => {
+          resolve(items)
+        });
+      } else {
+        chrome.storage.sync.get({
+          [key]: defaultValue
+        }, (items) => {
+          resolve(items[key])
+        });
+      }
     })
   }
 
