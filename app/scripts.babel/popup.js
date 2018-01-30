@@ -36,7 +36,6 @@ class Popup {
         if (response) {
           if (response.status === 'done') {
             this.taskDescription.value = '';
-            this.getTicketsList();
           }
         }
       });
@@ -78,25 +77,25 @@ class Popup {
                    </thead>
                    <tbody>`;
     taskList.forEach((item, index) => {
-      const timeStart = this.formatTime(item.timeStart, 'time');
-      const timeEnd = this.formatTime(item.timeEnd, 'time');
-      const duration = this.formatTime(item.duration, 'duration');
+      const timeStart = helper.formatTime(item.timeStart, 'time');
+      const timeEnd = helper.formatTime(item.timeEnd, 'time');
+      const duration = helper.formatTime(item.duration, 'duration');
       if (index !== taskList.length - 1) {
         table += `<tr>
-                  <th scope='row'>${index + 1}</th>
-                  <td>${timeStart}</td>
-                  <td>${timeEnd}</td>
-                  <td>${item.ticket}</td>
-                  <td>${duration}</td>
-                </tr>`
+                    <th scope='row'>${index + 1}</th>
+                    <td>${timeStart}</td>
+                    <td>${timeEnd}</td>
+                    <td>${item.ticket}</td>
+                    <td>${duration}</td>
+                  </tr>`
       } else {
         table += `<tr>
-                  <th scope='row'>${index + 1}</th>
-                  <td>${timeStart}</td>
-                  <td>In Progress</td>
-                  <td>${item.ticket}</td>
-                  <td>In Progress</td>
-                </tr>`
+                    <th scope='row'>${index + 1}</th>
+                    <td>${timeStart}</td>
+                    <td>In Progress</td>
+                    <td>${item.ticket}</td>
+                    <td>In Progress</td>
+                  </tr>`
       }
     });
     table += '</tbody></table>';
@@ -105,6 +104,11 @@ class Popup {
 
 
   showErrorMessage(error) {
+    const table = this.previousTaskWrapper.querySelector('table');
+    if (table) {
+      table.remove();
+    }
+
     const errorBlock = document.createElement('div');
     switch (error) {
       case 'EMPTY_DESCRIPTION':
@@ -117,28 +121,12 @@ class Popup {
         break;
       case 'EMPTY_TABLE':
         errorBlock.className = 'error content-error';
-        errorBlock.innerHTML = 'Any tickets filled today';
+        errorBlock.innerHTML = 'No tasks were specified';
         this.previousTaskWrapper.appendChild(errorBlock);
         setTimeout(() => {
           this.previousTaskWrapper.removeChild(errorBlock);
         }, 2000);
         break;
-    }
-  }
-
-  formatTime(time, marker) {
-    if (marker === 'time') {
-      let hours = new Date(time).getHours();
-      hours = hours < 10 ? '0' + hours : hours;
-      let minutes = new Date(time).getMinutes();
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return `${hours}:${minutes}`
-    } else if (marker === 'duration') {
-      let hours = parseInt(time / 1000 / 60 / 60);
-      let minutes = parseInt((time - hours * 1000 * 60 * 60) / 1000 / 60);
-      hours = hours < 10 ? '0' + hours : hours;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return `${hours} - ${minutes}`
     }
   }
 }

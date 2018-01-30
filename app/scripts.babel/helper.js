@@ -1,3 +1,5 @@
+import {MINUTES, HOURS} from "./constants";
+
 export function getFormattedDayToday(dateNow = new Date()) {
   return `${dateNow.getDate()}-${dateNow.getMonth() + 1}-${dateNow.getFullYear()}`
 }
@@ -6,7 +8,7 @@ export function checkIsWorkingDayAndTime(workingDays, workingTime) {
   const now = new Date();
   const dayOfWeekToday = now.getDay();
   if (workingDays[dayOfWeekToday].checked) {
-    const timeNow = `${now.getHours()}:${now.getMinutes()}`;
+    const timeNow = formatTime(new Date(), 'time');
     if (timeNow > workingTime.startTime && timeNow < workingTime.endTime) {
       return true
     }
@@ -29,4 +31,20 @@ export function closeOverlayToAllTabs() {
       chrome.tabs.sendMessage(tabs[i].id, {target: 'CLOSE_OVERLAY'});
     }
   });
+}
+
+export function formatTime(time, marker) {
+  if (marker === 'time') {
+    let hours = new Date(time).getHours();
+    hours = hours < 10 ? '0' + hours : hours;
+    let minutes = new Date(time).getMinutes();
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}:${minutes}`
+  } else if (marker === 'duration') {
+    let hours = parseInt(time / HOURS);
+    let minutes = parseInt((time - hours * HOURS) / MINUTES);
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours} - ${minutes}`
+  }
 }

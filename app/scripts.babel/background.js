@@ -2,10 +2,7 @@
 import Storage from './storage';
 import * as helper from './helper';
 
-const SECONDS = 1000;
-const MINUTES = SECONDS * 60;
-const HOURS = MINUTES * 60;
-const SETTINGS = ['rememberer-interval', 'rememberer-start-time', 'rememberer-end-time', 'rememberer-working-days'];
+import {SECONDS, MINUTES, SETTINGS, SAVE_CURRENT_TASK, GET_TICKETS_LIST, UPDATE_OPTIONS} from "./constants";
 
 const storage = new Storage();
 let notificationInterval;
@@ -13,7 +10,7 @@ let workingTimeInterval;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
-    case 'SAVE_CURRENT_TASK':
+    case SAVE_CURRENT_TASK:
       storage.saveCurrentTask(request.currentTask)
         .then(() => {
           sendResponse({status: 'done'});
@@ -24,7 +21,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           }
         });
       break;
-    case 'GET_TICKETS_LIST':
+    case GET_TICKETS_LIST:
       storage.getFromStorage(request.date, [])
         .then((ticketsList) => {
           sendResponse({
@@ -33,7 +30,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           });
         });
       break;
-    case 'UPDATE_OPTIONS':
+    case UPDATE_OPTIONS:
       prepareTimeWatching();
       sendResponse({status: 'done'});
       break;
@@ -43,7 +40,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function prepareTimeWatching() {
-  clearInterval(notificationInterval);
+  clearAllIntervals();
   storage.getFromStorage(SETTINGS)
     .then((response) => {
       const interval = response['rememberer-interval'] * MINUTES;
@@ -72,8 +69,8 @@ function prepareTimeWatching() {
 
 function notWorkingTimeInterval(workingDays, workingTime) {
   workingTimeInterval = setInterval(() => {
-    if (notWorkingTimeInterval(workingDays, workingTime)) {
-      clearInterval(workingTimeInterval);
+    if (helper.checkIsWorkingDayAndTime(workingDays, workingTime)) {
+      clearAllIntervals();
       prepareTimeWatching();
     }
   }, 5 * MINUTES);
@@ -103,6 +100,11 @@ function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
       }
     }
   }, 5 * SECONDS)
+}
+
+function clearAllIntervals() {
+  clearInterval(workingTimeInterval);
+  clearInterval(notificationInterval);
 }
 
 prepareTimeWatching();

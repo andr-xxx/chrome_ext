@@ -1,15 +1,4 @@
-const DEFAULT_INTERVAL = 60;
-const DEFAULT_START_TIME = '09:00';
-const DEFAULT_END_TIME = '19:00';
-const DEFAULT_WORKING_DAYS = [
-  {day: "Sunday", checked: false},
-  {day: "Monday", checked: true},
-  {day: "Tuesday", checked: true},
-  {day: "Wednesday", checked: true},
-  {day: "Thursday", checked: true},
-  {day: "Friday", checked: true},
-  {day: "Saturday", checked: false}
-];
+import {DEFAULT_INTERVAL, DEFAULT_START_TIME, DEFAULT_END_TIME, DEFAULT_WORKING_DAYS} from './constants';
 
 function saveOptions() {
   const interval = document.getElementById('interval').value;

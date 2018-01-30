@@ -1,3 +1,5 @@
+import {SECONDS, SAVE_CURRENT_TASK} from "./constants";
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
     case 'SHOW_OVERLAY':
@@ -32,7 +34,7 @@ function createOverlay() {
         chrome.runtime.sendMessage({
           currentTask: value,
           additionalInformation: 'FROM_OVERLAY',
-          target: 'SAVE_CURRENT_TASK'
+          target: SAVE_CURRENT_TASK
         }, (response) => {
           if (response) {
             if (response.status === 'done') {
@@ -51,7 +53,7 @@ function createOverlay() {
     body.appendChild(overlay);
     setTimeout(() => {
       window.scrollTo(0, 0);
-    }, 300);
+    }, 0.3 * SECONDS);
   }
 }
 
