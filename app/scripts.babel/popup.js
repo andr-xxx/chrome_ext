@@ -1,8 +1,7 @@
 import * as helper from './helper';
 
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => new Popup(), 1000)
-  // new Popup()
+  new Popup()
 }, false);
 
 class Popup {
@@ -69,8 +68,8 @@ class Popup {
                    <thead>
                      <tr>
                        <th>#</th>
-                       <th>Time Start</th>
-                       <th>Time End</th>
+                       <th>Start</th>
+                       <th>End</th>
                        <th>Description</th>
                        <th>Duration</th>
                      </tr>
@@ -101,7 +100,6 @@ class Popup {
     table += '</tbody></table>';
     this.previousTaskWrapper.innerHTML = table;
   }
-
 
   showErrorMessage(error) {
     const table = this.previousTaskWrapper.querySelector('table');

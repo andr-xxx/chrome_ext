@@ -1,6 +1,6 @@
-export const SECONDS = 1000;
-export const MINUTES = SECONDS * 60;
-export const HOURS = MINUTES * 60;
+export const SECOND = 1000;
+export const MINUTE = SECOND * 60;
+export const HOUR = MINUTE * 60;
 export const SETTINGS = ['rememberer-interval', 'rememberer-start-time', 'rememberer-end-time', 'rememberer-working-days'];
 
 export const SAVE_CURRENT_TASK = 'SAVE_CURRENT_TASK';

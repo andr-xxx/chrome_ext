@@ -1,4 +1,4 @@
-import {MINUTES, HOURS} from "./constants";
+import {MINUTE, HOUR} from './constants';
 
 export function getFormattedDayToday(dateNow = new Date()) {
   return `${dateNow.getDate()}-${dateNow.getMonth() + 1}-${dateNow.getFullYear()}`
@@ -27,7 +27,7 @@ export function showNotification() {
 
 export function closeOverlayToAllTabs() {
   chrome.tabs.query({}, function(tabs) {
-    for (let i=0; i<tabs.length; ++i) {
+    for (let i = 0; i < tabs.length; ++i) {
       chrome.tabs.sendMessage(tabs[i].id, {target: 'CLOSE_OVERLAY'});
     }
   });
@@ -41,8 +41,8 @@ export function formatTime(time, marker) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours}:${minutes}`
   } else if (marker === 'duration') {
-    let hours = parseInt(time / HOURS);
-    let minutes = parseInt((time - hours * HOURS) / MINUTES);
+    let hours = parseInt(time / HOUR);
+    let minutes = parseInt((time - hours * HOUR) / MINUTE);
     hours = hours < 10 ? '0' + hours : hours;
     minutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours} - ${minutes}`

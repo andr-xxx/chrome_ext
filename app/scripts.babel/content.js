@@ -1,4 +1,4 @@
-import {SECONDS, SAVE_CURRENT_TASK} from "./constants";
+import {SECOND, SAVE_CURRENT_TASK} from './constants';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
@@ -22,9 +22,9 @@ function createOverlay() {
     overlayContent.className = 'rememberer-overlay-content';
     overlayContent.innerHTML = `<div>
                                   <h1>Please, LOG YOUR FUCKING TIME!!!</h1>
-                                  <input type="text" class="rememberer-overlay-description">
+                                  <input type='text' class='rememberer-overlay-description'>
                                   <br/>
-                                  <button class="rememberer-save-task">Save</button>
+                                  <button class='rememberer-save-task'>Save</button>
                                 </div>`;
 
     const button = overlayContent.querySelector('.rememberer-save-task');
@@ -53,7 +53,7 @@ function createOverlay() {
     body.appendChild(overlay);
     setTimeout(() => {
       window.scrollTo(0, 0);
-    }, 0.3 * SECONDS);
+    }, 0.3 * SECOND);
   }
 }
 

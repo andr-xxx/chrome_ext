@@ -1,6 +1,5 @@
 import * as helper from './helper';
 
-// chrome.storage.sync.clear();
 export default class Storage {
   setInStorage(key, value) {
     return new Promise(((resolve, reject) => {

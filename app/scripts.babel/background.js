@@ -2,7 +2,7 @@
 import Storage from './storage';
 import * as helper from './helper';
 
-import {SECONDS, MINUTES, SETTINGS, SAVE_CURRENT_TASK, GET_TICKETS_LIST, UPDATE_OPTIONS} from "./constants";
+import {SECOND, MINUTE, SETTINGS, SAVE_CURRENT_TASK, GET_TICKETS_LIST, UPDATE_OPTIONS} from './constants';
 
 const storage = new Storage();
 let notificationInterval;
@@ -43,7 +43,7 @@ function prepareTimeWatching() {
   clearAllIntervals();
   storage.getFromStorage(SETTINGS)
     .then((response) => {
-      const interval = response['rememberer-interval'] * MINUTES;
+      const interval = response['rememberer-interval'] * MINUTE;
       const workingTime = {
         startTime: response['rememberer-start-time'],
         endTime: response['rememberer-end-time']
@@ -73,7 +73,7 @@ function notWorkingTimeInterval(workingDays, workingTime) {
       clearAllIntervals();
       prepareTimeWatching();
     }
-  }, 5 * MINUTES);
+  }, 5 * MINUTE);
 }
 
 function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
@@ -91,7 +91,6 @@ function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
             chrome.tabs.sendMessage(activeTabId,{
               target: 'SHOW_OVERLAY'
             }, (response) => {
-              console.log(response)
             });
           }
         })
@@ -99,7 +98,7 @@ function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
         helper.showNotification();
       }
     }
-  }, 5 * SECONDS)
+  }, 5 * SECOND)
 }
 
 function clearAllIntervals() {
