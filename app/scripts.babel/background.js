@@ -43,6 +43,10 @@ function prepareTimeWatching() {
   clearAllIntervals();
   storage.getFromStorage(SETTINGS)
     .then((response) => {
+      if (!Object.keys(response).length) {
+        return storage.setDefaultOptions(prepareTimeWatching);
+      }
+
       const interval = response['rememberer-interval'] * MINUTE;
       const workingTime = {
         startTime: response['rememberer-start-time'],
@@ -73,7 +77,7 @@ function notWorkingTimeInterval(workingDays, workingTime) {
       clearAllIntervals();
       prepareTimeWatching();
     }
-  }, 5 * MINUTE);
+  }, 5 * SECOND);
 }
 
 function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {

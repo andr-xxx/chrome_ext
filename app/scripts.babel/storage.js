@@ -1,4 +1,10 @@
 import * as helper from './helper';
+import {
+  DEFAULT_INTERVAL,
+  DEFAULT_START_TIME,
+  DEFAULT_END_TIME,
+  DEFAULT_WORKING_DAYS,
+} from './constants';
 
 export default class Storage {
   setInStorage(key, value) {
@@ -25,25 +31,34 @@ export default class Storage {
     })
   }
 
-  // todo move into background script this method
-  async saveCurrentTask(currentTask) {
+  saveCurrentTask(currentTask) {
     const dateToday = helper.getFormattedDayToday();
 
-    const todayTickets = await this.getFromStorage(dateToday, [])
+    return this.getFromStorage(dateToday, [])
       .then((response) => {
-        return response
+        if (response.length >= 1) {
+          const prevTicket = response[response.length - 1];
+          prevTicket.timeEnd = Date.now();
+          prevTicket.duration = prevTicket.timeEnd - prevTicket.timeStart;
+        }
+
+        this.setInStorage(dateToday, [...response, {
+          ticket: currentTask,
+          timeStart: Date.now()
+        }])
       });
+  }
 
-    if (todayTickets.length >= 1) {
-      const prevTicket = todayTickets[todayTickets.length - 1];
-      prevTicket.timeEnd = Date.now();
-      prevTicket.duration = prevTicket.timeEnd - prevTicket.timeStart;
-    }
-
-    await this.setInStorage(dateToday, [...todayTickets, {
-      ticket: currentTask,
-      timeStart: Date.now()
-    }])
+  setDefaultOptions(cb) {
+    debugger
+    chrome.storage.sync.set({
+      'rememberer-interval': DEFAULT_INTERVAL,
+      'rememberer-start-time': DEFAULT_START_TIME,
+      'rememberer-end-time': DEFAULT_END_TIME,
+      'rememberer-working-days': DEFAULT_WORKING_DAYS,
+    }, () => {
+      cb();
+    })
   }
 }
 

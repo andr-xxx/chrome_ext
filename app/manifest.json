@@ -2,7 +2,7 @@
   "name": "REMEMBERER",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "__MSG_appDescription__",
+  "description": "App for remember",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
