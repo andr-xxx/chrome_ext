@@ -21,7 +21,7 @@ function createOverlay() {
     const overlayContent = document.createElement('div');
     overlayContent.className = 'rememberer-overlay-content';
     overlayContent.innerHTML = `<div>
-                                  <h1>Please, LOG YOUR FUCKING TIME!!!</h1>
+                                  <h1>Please, log your time!!!</h1>
                                   <input type='text' class='rememberer-overlay-description'>
                                   <br/>
                                   <button class='rememberer-save-task'>Save</button>
