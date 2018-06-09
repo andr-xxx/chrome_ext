@@ -50,7 +50,6 @@ export default class Storage {
   }
 
   setDefaultOptions(cb) {
-    debugger
     chrome.storage.sync.set({
       'rememberer-interval': DEFAULT_INTERVAL,
       'rememberer-start-time': DEFAULT_START_TIME,
