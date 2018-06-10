@@ -30,13 +30,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           sendResponse({status: 'done'});
           prepareTimeWatching();
 
-          if (request.additionalInformation === FROM_OVERLAY) {
-            helper.closeOverlayToAllTabs();
-          }
+          helper.closeOverlayToAllTabs();
         });
       break;
     case CONTINUE_PREVIOUS:
-      console.log('save previouse');
+      storage.saveCurrentTask(request.currentTask)
+        .then(() => {
+          sendResponse({status: 'done'});
+          prepareTimeWatching();
+
+          helper.closeOverlayToAllTabs();
+        });
       break;
     case GET_TICKETS_LIST:
       storage.getFromStorage(request.date, [])

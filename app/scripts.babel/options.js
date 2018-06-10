@@ -23,10 +23,10 @@ function saveOptions() {
     });
 
   chrome.storage.sync.set({
-    INTERVAL: interval,
-    START_TIME: startTime,
-    END_TIME: endTime,
-    WORKING_DAYS: workingDays,
+    [INTERVAL]: interval,
+    [START_TIME]: startTime,
+    [END_TIME]: endTime,
+    [WORKING_DAYS]: workingDays,
   }, function () {
     updateSetting(() => {
       const status = document.getElementById('status');
@@ -40,10 +40,10 @@ function saveOptions() {
 
 function restoreOptions() {
   chrome.storage.sync.get({
-    INTERVAL: DEFAULT_INTERVAL,
-    START_TIME: DEFAULT_START_TIME,
-    END_TIME: DEFAULT_END_TIME,
-    WORKING_DAYS: DEFAULT_WORKING_DAYS,
+    [INTERVAL]: DEFAULT_INTERVAL,
+    [START_TIME]: DEFAULT_START_TIME,
+    [END_TIME]: DEFAULT_END_TIME,
+    [WORKING_DAYS]: DEFAULT_WORKING_DAYS,
   }, function (response) {
     document.getElementById('interval').value = response[INTERVAL];
     document.getElementById('start-time').value = response[START_TIME];

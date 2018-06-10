@@ -35,21 +35,22 @@ export default class Storage {
     })
   }
 
-  saveCurrentTask(currentTask) {
+  saveCurrentTask(currentTaskDescription) {
     const dateToday = helper.getFormattedDayToday();
 
     return this.getFromStorage(dateToday, [])
       .then((response) => {
-        if (response.length >= 1) {
-          const prevTicket = response[response.length - 1];
+        const prevTicket = response[response.length - 1];
+        if (prevTicket) {
           prevTicket.timeEnd = Date.now();
           prevTicket.duration = prevTicket.timeEnd - prevTicket.timeStart;
         }
+        const currentTask = {
+          timeStart: Date.now(),
+        };
+        currentTask.ticket = currentTaskDescription ? currentTaskDescription : prevTicket.ticket;
 
-        this.setInStorage(dateToday, [...response, {
-          ticket: currentTask,
-          timeStart: Date.now()
-        }])
+        this.setInStorage(dateToday, [...response, currentTask])
       });
   }
 

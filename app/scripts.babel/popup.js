@@ -46,7 +46,7 @@ class Popup {
   sendCurrentTask(shouldSavePrevious) {
     const target = shouldSavePrevious ? CONTINUE_PREVIOUS : SAVE_CURRENT_TASK;
     const description = this.taskDescription.value;
-    if (description) {
+    if (description || shouldSavePrevious) {
       chrome.runtime.sendMessage({
         currentTask: description,
         target: target
@@ -115,10 +115,13 @@ class Popup {
                      </tr>
                    </thead>
                    <tbody>`;
+
+    let previousTask;
     taskList.forEach((item, index) => {
       const timeStart = helper.formatTime(item.timeStart, 'time');
       const timeEnd = helper.formatTime(item.timeEnd, 'time');
       const duration = helper.formatTime(item.duration, 'duration');
+
       if (index !== taskList.length - 1) {
         table += `<tr>
                     <th scope='row'>${index + 1}</th>
@@ -139,6 +142,7 @@ class Popup {
     });
     table += '</tbody></table>';
     this.previousTaskWrapper.innerHTML = table;
+    previousTask = item;
   }
 
   showErrorMessage(error) {
