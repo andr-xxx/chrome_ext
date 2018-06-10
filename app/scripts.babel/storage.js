@@ -56,12 +56,12 @@ export default class Storage {
 
   setDefaultOptions(cb) {
     chrome.storage.sync.set({
-      INTERVAL: DEFAULT_INTERVAL,
-      START_TIME: DEFAULT_START_TIME,
-      END_TIME: DEFAULT_END_TIME,
-      WORKING_DAYS: DEFAULT_WORKING_DAYS,
+      [INTERVAL]: DEFAULT_INTERVAL,
+      [START_TIME]: DEFAULT_START_TIME,
+      [END_TIME]: DEFAULT_END_TIME,
+      [WORKING_DAYS]: DEFAULT_WORKING_DAYS,
     }, () => {
-      cb();
+      setTimeout(() => cb(), 3000)
     })
   }
 }

@@ -10,7 +10,6 @@ import {
   CONTINUE_PREVIOUS,
   GET_TICKETS_LIST,
   UPDATE_OPTIONS,
-  FROM_OVERLAY,
   SHOW_OVERLAY,
   INTERVAL,
   START_TIME,
@@ -65,7 +64,10 @@ function prepareTimeWatching() {
   storage.getFromStorage(SETTINGS)
     .then((response) => {
       if (!Object.keys(response).length) {
-        return storage.setDefaultOptions(prepareTimeWatching);
+        setTimeout(() => {
+          storage.setDefaultOptions(prepareTimeWatching);
+        }, 3000);
+        return ;
       }
 
       const interval = response[INTERVAL] * MINUTE;
@@ -98,7 +100,7 @@ function notWorkingTimeInterval(workingDays, workingTime) {
       clearAllIntervals();
       prepareTimeWatching();
     }
-  }, 5 * SECOND);
+  }, 5 * MINUTE);
 }
 
 function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
@@ -123,7 +125,7 @@ function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
         helper.showNotification();
       }
     }
-  }, 5 * SECOND)
+  }, MINUTE)
 }
 
 function clearAllIntervals() {

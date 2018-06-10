@@ -61,7 +61,7 @@ gulp.task('images', () => {
 });
 
 gulp.task('html',  () => {
-  return gulp.src('app/*.html')
+  return gulp.src('app/**/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.uglify()))
@@ -101,7 +101,8 @@ gulp.task('babel', () => {
     'content.js',
     'popup.js',
     'storage.js',
-    'options.js'
+    'options.js',
+    'constants.js'
   ];
 
   const tasks = files.map(file => (
@@ -149,7 +150,7 @@ gulp.task('wiredep', () => {
 gulp.task('package', function () {
   var manifest = require('./dist/manifest.json');
   return gulp.src('dist/**')
-      .pipe($.zip('cromeExtention-' + manifest.version + '.zip'))
+      .pipe($.zip('Rememberer-' + manifest.version + '.zip'))
       .pipe(gulp.dest('package'));
 });
 

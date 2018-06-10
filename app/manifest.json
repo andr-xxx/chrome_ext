@@ -1,6 +1,6 @@
 {
-  "name": "JustRemember",
-  "version": "0.0.6",
+  "name": "Rememberer",
+  "version": "0.0.12",
   "manifest_version": 2,
   "description": "Application for reminding time logging",
   "icons": {
