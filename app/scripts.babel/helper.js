@@ -45,6 +45,6 @@ export function formatTime(time, marker) {
     let minutes = parseInt((time - hours * HOUR) / MINUTE);
     hours = hours < 10 ? '0' + hours : hours;
     minutes = minutes < 10 ? '0' + minutes : minutes;
-    return `${hours} - ${minutes}`
+    return `${hours}-${minutes}`
   }
 }

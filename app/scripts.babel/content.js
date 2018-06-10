@@ -1,4 +1,4 @@
-import {SECOND, SAVE_CURRENT_TASK, FROM_OVERLAY, SHOW_OVERLAY, CLOSE_OVERLAY} from './constants';
+import { SECOND, SAVE_CURRENT_TASK, FROM_OVERLAY, SHOW_OVERLAY, CLOSE_OVERLAY, CONTINUE_PREVIOUS } from './constants';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
@@ -25,24 +25,19 @@ function createOverlay() {
                                   <input type='text' class='rememberer-overlay-description'>
                                   <br/>
                                   <button class='rememberer-save-task'>Save</button>
+                                  <button class='rememberer-save-previous-task'>Save previous</button>
                                 </div>`;
 
     const button = overlayContent.querySelector('.rememberer-save-task');
+    const previousTaskButton = overlayContent.querySelector('.rememberer-save-previous-task');
     button.addEventListener('click', () => {
       const value = document.querySelector('.rememberer-overlay-description').value;
       if (value) {
-        chrome.runtime.sendMessage({
-          currentTask: value,
-          additionalInformation: FROM_OVERLAY,
-          target: SAVE_CURRENT_TASK
-        }, (response) => {
-          if (response) {
-            if (response.status === 'done') {
-              removeOverlay();
-            }
-          }
-        });
+        saveTask(value, FROM_OVERLAY, SAVE_CURRENT_TASK);
       }
+    });
+    previousTaskButton.addEventListener('click', () => {
+      saveTask(null, FROM_OVERLAY, CONTINUE_PREVIOUS);
     });
     overlayContent.style.cssText = 'width:300px;margin: 100px auto;background-color: #fff;border:1px solid #000;padding:15px;text-align:center;z-index: 99999;';
 
@@ -57,6 +52,19 @@ function createOverlay() {
   }
 }
 
+function saveTask(value, additionalInformation, target) {
+  chrome.runtime.sendMessage({
+    currentTask: value,
+    additionalInformation,
+    target
+  }, (response) => {
+    if (response) {
+      if (response.status === 'done') {
+        removeOverlay();
+      }
+    }
+  });
+}
 
 function removeOverlay() {
   const overlay = document.querySelector('.rememberer-overlay');

@@ -45,7 +45,7 @@ class Popup {
 
   sendCurrentTask(shouldSavePrevious) {
     const target = shouldSavePrevious ? CONTINUE_PREVIOUS : SAVE_CURRENT_TASK;
-    const description = this.taskDescription.value;
+    const description = shouldSavePrevious ? null : this.taskDescription.value;
     if (description || shouldSavePrevious) {
       chrome.runtime.sendMessage({
         currentTask: description,
