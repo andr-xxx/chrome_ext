@@ -4,6 +4,10 @@ import {
   DEFAULT_START_TIME,
   DEFAULT_END_TIME,
   DEFAULT_WORKING_DAYS,
+  INTERVAL,
+  START_TIME,
+  END_TIME,
+  WORKING_DAYS,
 } from './constants';
 
 export default class Storage {
@@ -51,10 +55,10 @@ export default class Storage {
 
   setDefaultOptions(cb) {
     chrome.storage.sync.set({
-      'rememberer-interval': DEFAULT_INTERVAL,
-      'rememberer-start-time': DEFAULT_START_TIME,
-      'rememberer-end-time': DEFAULT_END_TIME,
-      'rememberer-working-days': DEFAULT_WORKING_DAYS,
+      INTERVAL: DEFAULT_INTERVAL,
+      START_TIME: DEFAULT_START_TIME,
+      END_TIME: DEFAULT_END_TIME,
+      WORKING_DAYS: DEFAULT_WORKING_DAYS,
     }, () => {
       cb();
     })

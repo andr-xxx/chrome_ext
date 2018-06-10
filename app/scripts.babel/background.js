@@ -12,6 +12,10 @@ import {
   UPDATE_OPTIONS,
   FROM_OVERLAY,
   SHOW_OVERLAY,
+  INTERVAL,
+  START_TIME,
+  END_TIME,
+  WORKING_DAYS,
 } from './constants';
 
 const storage = new Storage();
@@ -60,12 +64,12 @@ function prepareTimeWatching() {
         return storage.setDefaultOptions(prepareTimeWatching);
       }
 
-      const interval = response['rememberer-interval'] * MINUTE;
+      const interval = response[INTERVAL] * MINUTE;
       const workingTime = {
-        startTime: response['rememberer-start-time'],
-        endTime: response['rememberer-end-time']
+        startTime: response[START_TIME],
+        endTime: response[END_TIME]
       };
-      const workingDays = response['rememberer-working-days'];
+      const workingDays = response[WORKING_DAYS];
       const dateToday = helper.getFormattedDayToday();
 
       if (helper.checkIsWorkingDayAndTime(workingDays, workingTime)) {

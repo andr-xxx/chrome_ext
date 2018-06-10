@@ -1,4 +1,13 @@
-import {DEFAULT_INTERVAL, DEFAULT_START_TIME, DEFAULT_END_TIME, DEFAULT_WORKING_DAYS} from './constants';
+import {
+  DEFAULT_INTERVAL,
+  DEFAULT_START_TIME,
+  DEFAULT_END_TIME,
+  DEFAULT_WORKING_DAYS,
+  INTERVAL,
+  START_TIME,
+  END_TIME,
+  WORKING_DAYS,
+} from './constants';
 
 function saveOptions() {
   const interval = document.getElementById('interval').value;
@@ -14,10 +23,10 @@ function saveOptions() {
     });
 
   chrome.storage.sync.set({
-    'rememberer-interval': interval,
-    'rememberer-start-time': startTime,
-    'rememberer-end-time': endTime,
-    'rememberer-working-days': workingDays,
+    INTERVAL: interval,
+    START_TIME: startTime,
+    END_TIME: endTime,
+    WORKING_DAYS: workingDays,
   }, function () {
     updateSetting(() => {
       const status = document.getElementById('status');
@@ -31,18 +40,18 @@ function saveOptions() {
 
 function restoreOptions() {
   chrome.storage.sync.get({
-    'rememberer-interval': DEFAULT_INTERVAL,
-    'rememberer-start-time': DEFAULT_START_TIME,
-    'rememberer-end-time': DEFAULT_END_TIME,
-    'rememberer-working-days': DEFAULT_WORKING_DAYS,
+    INTERVAL: DEFAULT_INTERVAL,
+    START_TIME: DEFAULT_START_TIME,
+    END_TIME: DEFAULT_END_TIME,
+    WORKING_DAYS: DEFAULT_WORKING_DAYS,
   }, function (response) {
-    document.getElementById('interval').value = response['rememberer-interval'];
-    document.getElementById('start-time').value = response['rememberer-start-time'];
-    document.getElementById('end-time').value = response['rememberer-end-time'];
+    document.getElementById('interval').value = response[INTERVAL];
+    document.getElementById('start-time').value = response[START_TIME];
+    document.getElementById('end-time').value = response[END_TIME];
 
     Array.from(document.querySelectorAll('.days'))
-      .forEach((el, index)=> {
-        el.checked = response['rememberer-working-days'][index].checked
+      .forEach((el, index) => {
+        el.checked = response[WORKING_DAYS][index].checked
       })
   });
 }

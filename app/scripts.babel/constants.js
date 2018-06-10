@@ -1,7 +1,12 @@
 export const SECOND = 1000;
 export const MINUTE = SECOND * 60;
 export const HOUR = MINUTE * 60;
-export const SETTINGS = ['rememberer-interval', 'rememberer-start-time', 'rememberer-end-time', 'rememberer-working-days'];
+
+export const INTERVAL = 'rememberer-interval';
+export const START_TIME = 'rememberer-start-time';
+export const END_TIME = 'rememberer-end-time';
+export const WORKING_DAYS = 'rememberer-working-days';
+export const SETTINGS = [INTERVAL, START_TIME, END_TIME, WORKING_DAYS];
 
 export const SAVE_CURRENT_TASK = 'SAVE_CURRENT_TASK';
 export const GET_TICKETS_LIST = 'GET_TICKETS_LIST';
