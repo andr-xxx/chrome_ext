@@ -1,4 +1,14 @@
 import * as helper from './helper';
+import {
+  SAVE_CURRENT_TASK,
+  CONTINUE_PREVIOUS,
+  GET_TICKETS_LIST,
+} from './constants';
+const ERRORS = {
+  emptyDescription: 'EMPTY_DESCRIPTION',
+  emptyTable: 'EMPTY_TABLE',
+};
+
 
 document.addEventListener('DOMContentLoaded', () => {
   new Popup()
@@ -8,6 +18,7 @@ class Popup {
   constructor() {
     this.taskDescription = document.querySelector('#task-description');
     this.submitButton = document.querySelector('#save-task');
+    this.saveLikePrevious = document.querySelector('#save-like-previous-task');
     this.previousTaskWrapper = document.querySelector('.previous-tasks');
 
     this.datePicker = document.querySelector('#datepicker');
@@ -23,6 +34,7 @@ class Popup {
 
   initListeners() {
     this.submitButton.addEventListener('click', () => this.sendCurrentTask());
+    this.saveLikePrevious.addEventListener('click', () => this.sendCurrentTask('save-previous'));
     this.showTasksButton.addEventListener('click', () => {
       const selectedDate = helper.getFormattedDayToday(new Date(this.datePicker.value));
       this.getTicketsList(selectedDate)
@@ -31,12 +43,13 @@ class Popup {
     this.navigation.addEventListener('click', (e) => this.changeActiveTab(e))
   }
 
-  sendCurrentTask() {
+  sendCurrentTask(shouldSavePrevious) {
+    const target = shouldSavePrevious ? CONTINUE_PREVIOUS : SAVE_CURRENT_TASK;
     const description = this.taskDescription.value;
     if (description) {
       chrome.runtime.sendMessage({
         currentTask: description,
-        target: 'SAVE_CURRENT_TASK'
+        target: target
       }, (response) => {
         if (response) {
           if (response.status === 'done') {
@@ -45,13 +58,13 @@ class Popup {
         }
       });
     } else {
-      this.showErrorMessage('EMPTY_DESCRIPTION')
+      this.showErrorMessage(ERRORS.emptyDescription)
     }
   }
 
   getTicketsList(date = helper.getFormattedDayToday()) {
     chrome.runtime.sendMessage({
-      target: 'GET_TICKETS_LIST',
+      target: GET_TICKETS_LIST,
       date: date
     }, (response) => {
       if (response.status === 'done') {
@@ -59,7 +72,7 @@ class Popup {
           this.ticketsList = response.ticketsList;
           this.showTasks(this.ticketsList);
         } else {
-          this.showErrorMessage('EMPTY_TABLE');
+          this.showErrorMessage(ERRORS.emptyTable);
         }
       }
     });
@@ -136,7 +149,7 @@ class Popup {
 
     const errorBlock = document.createElement('div');
     switch (error) {
-      case 'EMPTY_DESCRIPTION':
+      case ERRORS.emptyDescription:
         errorBlock.className = 'error validation-error';
         errorBlock.innerHTML = 'Please, fill description field';
         this.taskDescription.parentElement.appendChild(errorBlock);
@@ -144,7 +157,7 @@ class Popup {
           this.taskDescription.parentElement.removeChild(errorBlock);
         }, 2000);
         break;
-      case 'EMPTY_TABLE':
+      case ERRORS.emptyTable:
         errorBlock.className = 'error content-error';
         errorBlock.innerHTML = 'No tasks were specified';
         this.previousTaskWrapper.appendChild(errorBlock);

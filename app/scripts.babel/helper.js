@@ -1,4 +1,4 @@
-import {MINUTE, HOUR} from './constants';
+import {MINUTE, HOUR, CLOSE_OVERLAY} from './constants';
 
 export function getFormattedDayToday(dateNow = new Date()) {
   return `${dateNow.getDate()}-${dateNow.getMonth() + 1}-${dateNow.getFullYear()}`
@@ -28,7 +28,7 @@ export function showNotification() {
 export function closeOverlayToAllTabs() {
   chrome.tabs.query({}, function(tabs) {
     for (let i = 0; i < tabs.length; ++i) {
-      chrome.tabs.sendMessage(tabs[i].id, {target: 'CLOSE_OVERLAY'});
+      chrome.tabs.sendMessage(tabs[i].id, {target: CLOSE_OVERLAY});
     }
   });
 }

@@ -1,11 +1,11 @@
-import {SECOND, SAVE_CURRENT_TASK} from './constants';
+import {SECOND, SAVE_CURRENT_TASK, FROM_OVERLAY, SHOW_OVERLAY, CLOSE_OVERLAY} from './constants';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
-    case 'SHOW_OVERLAY':
+    case SHOW_OVERLAY:
       createOverlay();
       break;
-    case 'CLOSE_OVERLAY':
+    case CLOSE_OVERLAY:
       removeOverlay();
   }
 
@@ -33,7 +33,7 @@ function createOverlay() {
       if (value) {
         chrome.runtime.sendMessage({
           currentTask: value,
-          additionalInformation: 'FROM_OVERLAY',
+          additionalInformation: FROM_OVERLAY,
           target: SAVE_CURRENT_TASK
         }, (response) => {
           if (response) {
@@ -44,7 +44,7 @@ function createOverlay() {
         });
       }
     });
-    overlayContent.style.cssText = 'width:300px;margin: 100px auto;background-color: #fff;border:1px solid #000;padding:15px;text-align:center;z-index: 99999;'
+    overlayContent.style.cssText = 'width:300px;margin: 100px auto;background-color: #fff;border:1px solid #000;padding:15px;text-align:center;z-index: 99999;';
 
     overlay.appendChild(overlayContent);
 

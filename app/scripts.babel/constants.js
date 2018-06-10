@@ -6,6 +6,10 @@ export const SETTINGS = ['rememberer-interval', 'rememberer-start-time', 'rememb
 export const SAVE_CURRENT_TASK = 'SAVE_CURRENT_TASK';
 export const GET_TICKETS_LIST = 'GET_TICKETS_LIST';
 export const UPDATE_OPTIONS = 'UPDATE_OPTIONS';
+export const CONTINUE_PREVIOUS = 'CONTINUE_PREVIOUS';
+export const FROM_OVERLAY = 'FROM_OVERLAY';
+export const SHOW_OVERLAY = 'SHOW_OVERLAY';
+export const CLOSE_OVERLAY = 'CLOSE_OVERLAY';
 
 export const DEFAULT_INTERVAL = 60;
 export const DEFAULT_START_TIME = '09:00';

@@ -2,7 +2,17 @@
 import Storage from './storage';
 import * as helper from './helper';
 
-import {SECOND, MINUTE, SETTINGS, SAVE_CURRENT_TASK, GET_TICKETS_LIST, UPDATE_OPTIONS} from './constants';
+import {
+  SECOND,
+  MINUTE,
+  SETTINGS,
+  SAVE_CURRENT_TASK,
+  CONTINUE_PREVIOUS,
+  GET_TICKETS_LIST,
+  UPDATE_OPTIONS,
+  FROM_OVERLAY,
+  SHOW_OVERLAY,
+} from './constants';
 
 const storage = new Storage();
 let notificationInterval;
@@ -16,10 +26,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           sendResponse({status: 'done'});
           prepareTimeWatching();
 
-          if (request.additionalInformation === 'FROM_OVERLAY') {
+          if (request.additionalInformation === FROM_OVERLAY) {
             helper.closeOverlayToAllTabs();
           }
         });
+      break;
+    case CONTINUE_PREVIOUS:
+      console.log('save previouse');
       break;
     case GET_TICKETS_LIST:
       storage.getFromStorage(request.date, [])
@@ -89,11 +102,11 @@ function checkLoggedTimeInterval(interval, lastTaskTime, counterLimit) {
     } else if (interval <= timePassed) {
       counter++;
       if (counter > counterLimit) {
-        chrome.tabs.query({currentWindow: true, active : true}, (response) => {
+        chrome.tabs.query({currentWindow: true, active: true}, (response) => {
           if (response.length) {
             const activeTabId = response[0].id;
-            chrome.tabs.sendMessage(activeTabId,{
-              target: 'SHOW_OVERLAY'
+            chrome.tabs.sendMessage(activeTabId, {
+              target: SHOW_OVERLAY,
             }, (response) => {
             });
           }
