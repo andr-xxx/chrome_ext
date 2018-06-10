@@ -7,20 +7,32 @@
   <link rel="stylesheet" href="../styles/popup.css">
 </head>
 <body>
-<h1 class="title">REMEMBERER</h1>
+<h1 class="title">Just remember</h1>
+<ul class="nav nav-pills nav-justified js-navigation">
+  <li class="nav-item">
+    <a class="nav-link active" data-value="task" href="#">Track your task</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-value="result" href="#">Results</a>
+  </li>
+</ul>
 <div class="container">
   <div class="row">
-    <div class="col-6">
-      <label for="datepicker">Set Date
-        <input type="date" id="datepicker">
-      </label>
-      <button class="btn btn-success" id="apply-date">Show Done Tasks</button>
-    </div>
-    <div class="col-6">
-      <label>Type what are you doing now
-        <input type="text" id="task-description" placeholder="Your work">
-      </label>
-      <button id="save-task">Done</button>
+    <div class="col content-wrapper">
+      <div class="js-task-tab">
+        <label>Type what are you doing now
+          <input type="text" id="task-description" placeholder="Your work">
+        </label>
+        <button id="save-task" class="btn btn-success">Done</button>
+        <button id="save-like-previous-task" class="btn btn-success">Continue previous</button>
+      </div>
+
+      <div class="js-results-tab">
+        <label for="datepicker">Set Date
+          <input type="date" id="datepicker">
+        </label>
+        <button class="btn btn-success" id="apply-date">Show Done Tasks</button>
+      </div>
     </div>
   </div>
 </div>

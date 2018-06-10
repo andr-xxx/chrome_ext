@@ -12,6 +12,10 @@ class Popup {
 
     this.datePicker = document.querySelector('#datepicker');
     this.showTasksButton = document.querySelector('#apply-date');
+    this.navigation = document.querySelector('.js-navigation');
+    this.navLinks = document.querySelectorAll('.nav-link');
+    this.taskTab = document.querySelector('.js-task-tab');
+    this.resultsTab = document.querySelector('.js-results-tab');
 
     this.initListeners();
     this.setDatepickerDate();
@@ -23,6 +27,8 @@ class Popup {
       const selectedDate = helper.getFormattedDayToday(new Date(this.datePicker.value));
       this.getTicketsList(selectedDate)
     });
+
+    this.navigation.addEventListener('click', (e) => this.changeActiveTab(e))
   }
 
   sendCurrentTask() {
@@ -57,6 +63,27 @@ class Popup {
         }
       }
     });
+  }
+
+  changeActiveTab(e) {
+    const target = e.target;
+    if (target.nodeName.toLowerCase() !== 'a') return;
+    if (Array.from(target.classList).indexOf('active') >= 0) return;
+
+    const destination = target.attributes['data-value'].value;
+    this.navLinks.forEach((item) => {
+      item.className = 'nav-link'
+    });
+    target.className += ' active';
+
+    if (destination === 'result') {
+      this.resultsTab.style.display = 'block';
+      this.taskTab.style.display = 'none';
+    } else {
+      this.resultsTab.style.display = 'none';
+      this.taskTab.style.display = 'block';
+      this.previousTaskWrapper.innerHTML = '';
+    }
   }
 
   setDatepickerDate(date = new Date()) {

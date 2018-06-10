@@ -1,6 +1,6 @@
 html {
-  height: 500px;
-  Width: 450px;
+  height: 700px;
+  Width: 500px;
 }
 
 h1 {
@@ -9,8 +9,22 @@ h1 {
 
 input,label {
   display: block;
+  width: 400px;
 }
 
 .error {
   color: #ff0000;
+}
+
+.js-results-tab {
+  display: none;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.nav {
+  margin-bottom: 25px;
 }
